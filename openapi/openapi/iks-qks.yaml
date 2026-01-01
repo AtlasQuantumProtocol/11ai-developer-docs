@@ -1,1 +1,183 @@
+openapi: 3.0.3
+info:
+  title: 11/11 IKS / QKS API
+  version: "1.0.0"
+  description: |
+    Public API for the **11/11 Identity & Key System (IKS) / Quantum Key System (QKS)**.
+
+    This API provides cryptographic governance and key-controlled execution primitives
+    used across the 11/11 platform.
+
+    ⚠️ This specification intentionally documents **interfaces and behavior only**.
+    Internal cryptographic algorithms, key derivation logic, and policy engines
+    are proprietary and not exposed.
+
+servers:
+  - url: https://api.11ai.com
+
+tags:
+  - name: Governance
+    description: Cryptographic governance and policy enforcement
+  - name: Keys
+    description: Key lifecycle and permissioned access
+  - name: Operations
+    description: Auditable cryptographic operations
+
+security:
+  - ApiKeyAuth: []
+  - SignatureAuth: []
+
+paths:
+  /iks/keys:
+    get:
+      tags: [Keys]
+      summary: List keys
+      description: |
+        Returns metadata for keys accessible to the caller.
+        Key material is never exposed.
+      responses:
+        "200":
+          description: List of keys
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/KeyMetadata"
+
+  /iks/keys/{key_id}:
+    get:
+      tags: [Keys]
+      summary: Get key metadata
+      parameters:
+        - name: key_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Key metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyMetadata"
+
+  /qks/operations/sign:
+    post:
+      tags: [Operations]
+      summary: Request a signed operation
+      description: |
+        Requests a cryptographically governed signing operation.
+        The operation is evaluated against policy and audit constraints
+        before execution.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignRequest"
+      responses:
+        "200":
+          description: Signed response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignResponse"
+
+  /qks/audit/logs:
+    get:
+      tags: [Governance]
+      summary: Retrieve audit logs
+      description: |
+        Returns audit records for governed cryptographic operations.
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: Audit log entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logs:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AuditLog"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-11-API-KEY
+
+    SignatureAuth:
+      type: apiKey
+      in: header
+      name: X-11-SIGNATURE
+
+  schemas:
+    KeyMetadata:
+      type: object
+      properties:
+        key_id:
+          type: string
+        type:
+          type: string
+          example: governance
+        status:
+          type: string
+          example: active
+        created_at:
+          type: string
+          format: date-time
+
+    SignRequest:
+      type: object
+      required:
+        - key_id
+        - payload
+      properties:
+        key_id:
+          type: string
+        payload:
+          type: string
+          description: Base64-encoded payload
+
+    SignResponse:
+      type: object
+      properties:
+        signature:
+          type: string
+        algorithm:
+          type: string
+          example: governed-signature
+        audit_id:
+          type: string
+
+    AuditLog:
+      type: object
+      properties:
+        audit_id:
+          type: string
+        operation:
+          type: string
+          example: sign
+        key_id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        result:
+          type: string
+          example: approved
 
