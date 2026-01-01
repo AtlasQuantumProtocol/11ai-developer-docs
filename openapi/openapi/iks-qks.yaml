@@ -3,13 +3,13 @@ info:
   title: 11/11 IKS / QKS API
   version: "1.0.0"
   description: |
-    Public API for the **11/11 Identity & Key System (IKS) / Quantum Key System (QKS)**.
+    Public API for the 11/11 Identity and Key System (IKS) / Quantum Key System (QKS).
 
     This API provides cryptographic governance and key-controlled execution primitives
     used across the 11/11 platform.
 
-    ⚠️ This specification intentionally documents **interfaces and behavior only**.
-    Internal cryptographic algorithms, key derivation logic, and policy engines
+    ⚠️ This specification intentionally documents interfaces and behavior only.
+    Internal cryptographic algorithms, key derivation logic and policy engines
     are proprietary and not exposed.
 
 servers:
