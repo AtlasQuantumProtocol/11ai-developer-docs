@@ -1,0 +1,14 @@
+Authentication
+
+All platform APIs use a consistent authentication model.
+
+ Required Headers
+- `X-11-API-KEY`
+- `X-11-TIMESTAMP`
+- `X-11-SIGNATURE`
+
+ Optional
+- `X-11-IDEMPOTENCY-KEY`
+
+Request signing is handled by official SDKs.  
+This documentation does not disclose signing internals.
