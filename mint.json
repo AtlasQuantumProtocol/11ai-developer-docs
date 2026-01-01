@@ -1,0 +1,44 @@
+{
+  "name": "11 AI Developer Platform",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://11ai.com"
+  },
+  "theme": {
+    "background": "dark",
+    "color": "#2563EB"
+  },
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "docs/index",
+        "docs/authentication",
+        "docs/sdks/quickstart"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "openapi/iks-qks",
+        "openapi/atlas-ipfs",
+        "openapi/ai-platform"
+      ]
+    },
+    {
+      "group": "Legal",
+      "pages": [
+        "docs/legal"
+      ]
+    }
+  ],
+  "navbar": {
+    "links": [
+      { "label": "Blog", "url": "https://11ai.com/blog" },
+      { "label": "11/11 Research Labs", "url": "https://11ai.com/blog/categories/11-11-research-labs" },
+      { "label": "Git – lang-EXP", "url": "https://github.com/11-ai/11-11-lang-EXP" },
+      { "label": "Git – IKS-ENV", "url": "https://github.com/11-ai/11-11-IKS-env" }
+    ]
+  }
+}
