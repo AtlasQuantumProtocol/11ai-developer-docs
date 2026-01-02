@@ -1,86 +1,74 @@
 {
   "$schema": "https://mintlify.com/schema.json",
+
   "name": "11 AI Developer Platform",
+
   "theme": "mint",
+
   "colors": {
     "primary": "#2563EB",
     "light": "#60A5FA",
     "dark": "#1E3A8A"
   },
+
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg",
     "href": "https://www.11aiblockchain.com/"
   },
-  { "label": "DEPLOY_TEST_1000", "href": "https://www.11aiblockchain.com/blog" }
+
   "navbar": {
-    "links": []
-  },
-  "navigation": {
-    "products": [
+    "links": [
       {
-        "product": "11/11 IKS / QKS",
-        "description": "Cryptographic governance and key systems.",
-        "icon": "key",
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": [
-              "docs/index",
-              "docs/authentication",
-              "docs/sdks/quickstart"
-            ]
-          },
-          {
-            "group": "API Reference",
-            "openapi": "openapi/iks-qks.yaml"
-          }
-        ]
+        "label": "Blog",
+        "href": "https://www.11aiblockchain.com/blog"
       },
       {
-        "product": "Atlas 11/11 IPFS",
-        "description": "Secure, auditable storage and access services.",
-        "icon": "database",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "docs/index"
-            ]
-          },
-          {
-            "group": "API Reference",
-            "openapi": "openapi/atlas-ipfs.yaml"
-          }
-        ]
+        "label": "11/11 Research Labs",
+        "href": "https://www.11aiblockchain.com/blog/categories/11-11-research-labs"
       },
       {
-        "product": "11/11 AI Platform",
-        "description": "Governed AI execution services.",
-        "icon": "cpu",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "docs/index"
-            ]
-          },
-          {
-            "group": "API Reference",
-            "openapi": "openapi/ai-platform.yaml"
-          }
-        ]
-      }
-    ],
-    "groups": [
+        "label": "Git – lang-EXP",
+        "href": "https://github.com/11-ai/11-11-lang-EXP"
+      },
       {
-        "group": "Legal",
-        "pages": [
-          "docs/legal"
-        ]
+        "label": "Git – IKS-ENV",
+        "href": "https://github.com/11-ai/11-11-IKS-env"
       }
     ]
-  }
+  },
+
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "docs/index",
+        "docs/authentication",
+        "docs/sdks/quickstart"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        {
+          "openapi": "openapi/openapi/iks-qks.yaml"
+        },
+        {
+          "openapi": "openapi/openapi/atlas-ipfs.yaml"
+        },
+        {
+          "openapi": "openapi/openapi/ai-platform.yaml"
+        }
+      ]
+    },
+    {
+      "group": "Legal",
+      "pages": [
+        "docs/legal"
+      ]
+    }
+  ]
 }
+
 
 
