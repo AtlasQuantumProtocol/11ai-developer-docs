@@ -15,9 +15,18 @@
   "navbar": {
     "links": [
       { "label": "Blog", "href": "https://www.11aiblockchain.com/blog" },
-      { "label": "11/11 Research Labs", "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research" },
-      { "label": "Git – lang-EXP", "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP" },
-      { "label": "Git – IKS-ENV", "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV" }
+      {
+        "label": "11/11 Research Labs",
+        "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research"
+      },
+      {
+        "label": "Git – lang-EXP",
+        "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP"
+      },
+      {
+        "label": "Git – IKS-ENV",
+        "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV"
+      }
     ]
   },
   "navigation": {
@@ -31,19 +40,14 @@
         ]
       },
       {
-       {
-  "group": "API Reference — IKS / QKS",
-  "openapi": "openapi/iks-qks.yaml"
-},
-{
-  "group": "API Reference — Atlas IPFS",
-  "openapi": "openapi/atlas-ipfs.yaml"
-},
-{
-  "group": "API Reference — AI Platform",
-  "openapi": "openapi/ai-platform.yaml"
-}
-
+        "group": "API Reference",
+        "pages": [
+          "api/iks-qks",
+          "api/atlas-ipfs",
+          "api/ai-platform"
+        ]
+      },
+      {
         "group": "Legal",
         "pages": [
           "docs/legal"
@@ -57,14 +61,23 @@
         "label": "Company",
         "items": [
           { "label": "Blog", "href": "https://www.11aiblockchain.com/blog" },
-          { "label": "Research", "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research" }
+          {
+            "label": "Research",
+            "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research"
+          }
         ]
       },
       {
         "label": "Developers",
         "items": [
-          { "label": "Lang-EXP", "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP" },
-          { "label": "IKS-ENV", "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV" }
+          {
+            "label": "Lang-EXP",
+            "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP"
+          },
+          {
+            "label": "IKS-ENV",
+            "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV"
+          }
         ]
       },
       {
@@ -76,6 +89,7 @@
     ]
   }
 }
+
 
 
 
