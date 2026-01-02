@@ -49,8 +49,11 @@
       },
 
       {
-        "group": "API Reference — IKS / QKS",
-        "openapi": "openapi/openapi/iks-qks.yaml"
+      {
+  "group": "API Reference — IKS / QKS",
+  "openapi": "openapi/openapi/iks-qks.yaml"
+},
+
       },
 
       {
