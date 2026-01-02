@@ -29,24 +29,31 @@
       }
     ]
   },
-  "navigation": {
-    "pages": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "docs/index",
-          "docs/authentication",
-          "docs/sdks/quickstart"
-        ]
-      },
-      {
-        "group": "Legal",
-        "pages": [
-          "docs/legal"
-        ]
-      }
-    ]
-  }
+ "navigation": {
+  "pages": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "docs/index",
+        "docs/authentication",
+        "docs/sdks/quickstart"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        { "openapi": "openapi/iks-qks.yaml" },
+        { "openapi": "openapi/atlas-ipfs.yaml" },
+        { "openapi": "openapi/ai-platform.yaml" }
+      ]
+    },
+    {
+      "group": "Legal",
+      "pages": [
+        "docs/legal"
+      ]
+    }
+  ]
 }
 
 
