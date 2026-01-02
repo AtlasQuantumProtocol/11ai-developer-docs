@@ -1,0 +1,112 @@
+openapi: 3.0.3
+info:
+  title: 11/11 IKS / QKS API
+  version: "1.0.0"
+  description: |
+    Public API for the 11/11 IKS / QKS layer.
+
+    Interfaces and behavior only. Internal cryptographic algorithms, derivation logic,
+    and policy engines are proprietary and intentionally excluded.
+servers:
+  - url: https://api.11aiblockchain.com
+
+tags:
+  - name: Keys
+    description: Key metadata and governed key access
+  - name: Operations
+    description: Auditable operations controlled by policy
+
+security:
+  - ApiKeyAuth: []
+  - SignatureAuth: []
+
+paths:
+  /iks/keys:
+    get:
+      tags: [Keys]
+      summary: List keys
+      description: Returns key metadata visible to the caller. Key material is never exposed.
+      responses:
+        "200":
+          description: List of keys
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/KeyMetadata"
+
+  /iks/keys/{key_id}:
+    get:
+      tags: [Keys]
+      summary: Get key metadata
+      parameters:
+        - name: key_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Key metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyMetadata"
+
+  /qks/operations/sign:
+    post:
+      tags: [Operations]
+      summary: Request a governed signing operation
+      description: Requests a policy-governed signing operation (interface-only).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignRequest"
+      responses:
+        "200":
+          description: Signed response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignResponse"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-11-API-KEY
+    SignatureAuth:
+      type: apiKey
+      in: header
+      name: X-11-SIGNATURE
+
+  schemas:
+    KeyMetadata:
+      type: object
+      properties:
+        key_id: { type: string }
+        type: { type: string, example: "governance" }
+        status: { type: string, example: "active" }
+        created_at: { type: string, format: date-time }
+
+    SignRequest:
+      type: object
+      required: [key_id, payload]
+      properties:
+        key_id: { type: string }
+        payload:
+          type: string
+          description: Base64-encoded payload
+
+    SignResponse:
+      type: object
+      properties:
+        signature: { type: string }
+        algorithm: { type: string, example: "governed-signature" }
+        audit_id: { type: string }
