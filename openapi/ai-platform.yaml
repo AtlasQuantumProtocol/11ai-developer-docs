@@ -1,0 +1,142 @@
+openapi: 3.0.3
+info:
+  title: 11/11 AI Platform API
+  version: "1.0.0"
+  description: |
+    Public API for governed AI execution services.
+
+    Interfaces and behavior only. Model internals and policy engines remain proprietary.
+servers:
+  - url: https://api.11aiblockchain.com
+
+tags:
+  - name: Jobs
+    description: Job submission and lifecycle
+  - name: Results
+    description: Job result retrieval
+
+security:
+  - ApiKeyAuth: []
+  - SignatureAuth: []
+
+paths:
+  /ai/jobs:
+    post:
+      tags: [Jobs]
+      summary: Submit a job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitJobRequest"
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobReceipt"
+
+    get:
+      tags: [Jobs]
+      summary: List jobs
+      responses:
+        "200":
+          description: Jobs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobs:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/JobStatus"
+
+  /ai/jobs/{job_id}:
+    get:
+      tags: [Jobs]
+      summary: Get job status
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobStatus"
+
+  /ai/jobs/{job_id}/result:
+    get:
+      tags: [Results]
+      summary: Get job result
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobResult"
+        "409":
+          description: Not ready
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-11-API-KEY
+    SignatureAuth:
+      type: apiKey
+      in: header
+      name: X-11-SIGNATURE
+
+  schemas:
+    SubmitJobRequest:
+      type: object
+      required: [tenant_id, job_type, input]
+      properties:
+        tenant_id: { type: string }
+        job_type: { type: string }
+        input:
+          type: object
+          additionalProperties: true
+        options:
+          type: object
+          additionalProperties: true
+
+    JobReceipt:
+      type: object
+      required: [job_id, status]
+      properties:
+        job_id: { type: string }
+        status: { type: string, enum: [ACCEPTED] }
+        audit_id: { type: string }
+
+    JobStatus:
+      type: object
+      required: [job_id, status]
+      properties:
+        job_id: { type: string }
+        status:
+          type: string
+          enum: [PENDING, RUNNING, SUCCEEDED, FAILED, CANCELED]
+        updated_at: { type: string, format: date-time }
+
+    JobResult:
+      type: object
+      properties:
+        job_id: { type: string }
+        output:
+          type: object
+          additionalProperties: true
