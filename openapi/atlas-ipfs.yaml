@@ -1,51 +1,121 @@
 openapi: 3.0.3
+
 info:
   title: Atlas 11/11 IPFS API
-  description: Secure storage and auditable data access
   version: "1.0.0"
+  description: |
+    Secure, auditable storage and controlled data access APIs for Atlas 11/11 IPFS.
+
+    This specification documents interfaces and system behavior only.
+    Storage internals, routing and policy engines remain proprietary.
+
+servers:
+  - url: https://api.11aiblockchain.com
 
 tags:
-  - name: Storage
-    description: Data storage operations
-  - name: Retrieval
-    description: Data retrieval operations
-
-components:
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-11-API-KEY
+  - name: Objects
+    description: Object creation, listing, metadata and lifecycle
+  - name: Access
+    description: Access grants and controlled retrieval
+  - name: Audit
+    description: Audit-aligned events and traceability
 
 security:
   - ApiKeyAuth: []
+  - TimestampAuth: []
   - SignatureAuth: []
 
 paths:
   /atlas/objects:
     post:
       tags: [Objects]
-      summary: Create object record (upload intent)
+      summary: Create an object record (upload intent)
+      description: |
+        Creates an object record and returns an upload intent. The actual upload mechanism may vary by environment.
+        No raw object data is embedded in the response.
+      operationId: createObject
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/CreateObjectRequest"
+            examples:
+              pdf:
+                summary: Upload intent for a PDF
+                value:
+                  tenant_id: "tenant_123"
+                  name: "research-report.pdf"
+                  content_type: "application/pdf"
+                  metadata:
+                    category: "research"
+                    classification: "internal"
+              image:
+                summary: Upload intent for an image
+                value:
+                  tenant_id: "tenant_123"
+                  name: "atlas-diagram.png"
+                  content_type: "image/png"
+                  metadata:
+                    category: "docs"
+                    tags: ["atlas", "diagram"]
       responses:
         "201":
-          description: Created
+          description: Object record created
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ObjectRecord"
+              examples:
+                created:
+                  value:
+                    object_id: "obj_456"
+                    tenant_id: "tenant_123"
+                    name: "research-report.pdf"
+                    content_type: "application/pdf"
+                    status: "AVAILABLE"
+                    created_at: "2026-01-01T21:00:00Z"
+                    metadata:
+                      category: "research"
+                      classification: "internal"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                bad_request:
+                  value:
+                    error: "invalid_request"
+                    message: "content_type is required"
+        "401":
+          description: Unauthorized
+        "429":
+          description: Rate limited
 
     get:
       tags: [Objects]
       summary: List objects
+      description: Returns object records visible to the caller (most recent first).
+      operationId: listObjects
+      parameters:
+        - name: tenant_id
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
       responses:
         "200":
-          description: List
+          description: List of object records
           content:
             application/json:
               schema:
@@ -55,11 +125,33 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ObjectRecord"
+              examples:
+                list:
+                  value:
+                    objects:
+                      - object_id: "obj_456"
+                        tenant_id: "tenant_123"
+                        name: "research-report.pdf"
+                        content_type: "application/pdf"
+                        status: "AVAILABLE"
+                        created_at: "2026-01-01T21:00:00Z"
+                        metadata:
+                          category: "research"
+                      - object_id: "obj_789"
+                        tenant_id: "tenant_123"
+                        name: "atlas-diagram.png"
+                        content_type: "image/png"
+                        status: "AVAILABLE"
+                        created_at: "2026-01-01T20:50:00Z"
+                        metadata:
+                          category: "docs"
 
   /atlas/objects/{object_id}:
     get:
       tags: [Objects]
-      summary: Get object record
+      summary: Get an object record
+      description: Returns the object record metadata.
+      operationId: getObject
       parameters:
         - name: object_id
           in: path
@@ -67,16 +159,57 @@ paths:
           schema: { type: string }
       responses:
         "200":
-          description: Record
+          description: Object record
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ObjectRecord"
+              examples:
+                record:
+                  value:
+                    object_id: "obj_456"
+                    tenant_id: "tenant_123"
+                    name: "research-report.pdf"
+                    content_type: "application/pdf"
+                    status: "AVAILABLE"
+                    created_at: "2026-01-01T21:00:00Z"
+                    metadata:
+                      category: "research"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                not_found:
+                  value:
+                    error: "not_found"
+                    message: "object_id not found"
+
+    delete:
+      tags: [Objects]
+      summary: Delete an object record
+      description: |
+        Deletes the object record. Data retention and deletion semantics may be policy-governed.
+      operationId: deleteObject
+      parameters:
+        - name: object_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
 
   /atlas/objects/{object_id}/metadata:
     patch:
-      tags: [Metadata]
+      tags: [Objects]
       summary: Update object metadata
+      description: Updates metadata fields for an object record.
+      operationId: patchMetadata
       parameters:
         - name: object_id
           in: path
@@ -87,15 +220,96 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties: true
+              $ref: "#/components/schemas/MetadataPatch"
+            examples:
+              add_tags:
+                summary: Add tags + classification
+                value:
+                  tags: ["labs", "atlas", "2026"]
+                  classification: "confidential"
       responses:
         "200":
-          description: Updated
+          description: Updated object record
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ObjectRecord"
+
+  /atlas/access/grants:
+    post:
+      tags: [Access]
+      summary: Create an access grant
+      description: |
+        Creates an auditable access grant for an object. Grants are policy-governed and may include expiration.
+      operationId: createGrant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccessGrantRequest"
+            examples:
+              read_grant:
+                summary: Grant read access
+                value:
+                  object_id: "obj_456"
+                  grantee: "partner_abc"
+                  permissions: ["read"]
+                  expires_at: "2026-02-01T00:00:00Z"
+      responses:
+        "200":
+          description: Grant created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessGrantResponse"
+              examples:
+                granted:
+                  value:
+                    grant_id: "grant_001"
+                    object_id: "obj_456"
+                    status: "ACTIVE"
+                    audit_id: "audit_101"
+
+  /atlas/audit/events:
+    get:
+      tags: [Audit]
+      summary: List audit events
+      description: Returns audit events for object lifecycle and access grants.
+      operationId: listAtlasAuditEvents
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
+      responses:
+        "200":
+          description: Audit events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AuditEvent"
+              examples:
+                events:
+                  value:
+                    events:
+                      - audit_id: "audit_101"
+                        event_type: "object_created"
+                        object_id: "obj_456"
+                        timestamp: "2026-01-01T21:00:00Z"
+                      - audit_id: "audit_101"
+                        event_type: "grant_created"
+                        object_id: "obj_456"
+                        timestamp: "2026-01-01T21:01:00Z"
 
 components:
   securitySchemes:
@@ -103,32 +317,114 @@ components:
       type: apiKey
       in: header
       name: X-11-API-KEY
+      description: API key for platform access
+    TimestampAuth:
+      type: apiKey
+      in: header
+      name: X-11-TIMESTAMP
+      description: Unix timestamp (seconds)
     SignatureAuth:
       type: apiKey
       in: header
       name: X-11-SIGNATURE
+      description: Request signature (SDK-generated)
 
   schemas:
     CreateObjectRequest:
       type: object
       required: [tenant_id, name, content_type]
       properties:
-        tenant_id: { type: string }
-        name: { type: string }
-        content_type: { type: string }
+        tenant_id:
+          type: string
+        name:
+          type: string
+        content_type:
+          type: string
         metadata:
           type: object
           additionalProperties: true
 
+    MetadataPatch:
+      type: object
+      description: Partial metadata update
+      additionalProperties: true
+
     ObjectRecord:
       type: object
-      required: [object_id, tenant_id, name, content_type, created_at]
+      required: [object_id, tenant_id, name, content_type, created_at, status]
       properties:
-        object_id: { type: string }
-        tenant_id: { type: string }
-        name: { type: string }
-        content_type: { type: string }
-        created_at: { type: string, format: date-time }
+        object_id:
+          type: string
+        tenant_id:
+          type: string
+        name:
+          type: string
+        content_type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [AVAILABLE, PENDING, DELETED]
         metadata:
           type: object
           additionalProperties: true
+
+    AccessGrantRequest:
+      type: object
+      required: [object_id, grantee, permissions]
+      properties:
+        object_id:
+          type: string
+        grantee:
+          type: string
+          description: External identifier for the grantee
+        permissions:
+          type: array
+          items:
+            type: string
+          example: ["read"]
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    AccessGrantResponse:
+      type: object
+      properties:
+        grant_id:
+          type: string
+        object_id:
+          type: string
+        status:
+          type: string
+          enum: [ACTIVE, REVOKED, EXPIRED]
+        audit_id:
+          type: string
+
+    AuditEvent:
+      type: object
+      properties:
+        audit_id:
+          type: string
+        event_type:
+          type: string
+        object_id:
+          type: string
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: object
+          additionalProperties: true
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+
