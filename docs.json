@@ -1,6 +1,5 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-
   "name": "11 AI Developer Platform",
 
   "theme": "mint",
@@ -37,39 +36,81 @@
       }
     ]
   },
-"navigation": {
-  "groups": [
-    {
-      "group": "Getting Started",
-      "pages": [
-        "docs/index",
-        "docs/authentication",
-        "docs/sdks/quickstart"
-      ]
-    },
 
-    {
-      "group": "API Reference — IKS / QKS",
-      "openapi": "openapi/openapi/iks-qks.yaml"
-    },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "docs/index",
+          "docs/authentication",
+          "docs/sdks/quickstart"
+        ]
+      },
 
-    {
-      "group": "API Reference — Atlas IPFS",
-      "openapi": "openapi/atlas-ipfs.yaml"
-    },
+      {
+        "group": "API Reference — IKS / QKS",
+        "openapi": "openapi/openapi/iks-qks.yaml"
+      },
 
-    {
-      "group": "API Reference — AI Platform",
-      "openapi": "openapi/ai-platform.yaml"
-    },
+      {
+        "group": "API Reference — Atlas IPFS",
+        "openapi": "openapi/atlas-ipfs.yaml"
+      },
 
-    {
-      "group": "Legal",
-      "pages": [
-        "docs/legal"
-      ]
-    }
-  ]
+      {
+        "group": "API Reference — AI Platform",
+        "openapi": "openapi/ai-platform.yaml"
+      },
+
+      {
+        "group": "Legal",
+        "pages": [
+          "docs/legal"
+        ]
+      }
+    ]
+  },
+
+  "footer": {
+    "links": [
+      {
+        "label": "Company",
+        "items": [
+          {
+            "label": "Blog",
+            "href": "https://www.11aiblockchain.com/blog"
+          },
+          {
+            "label": "Research",
+            "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research"
+          }
+        ]
+      },
+      {
+        "label": "Developers",
+        "items": [
+          {
+            "label": "Lang-EXP",
+            "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP"
+          },
+          {
+            "label": "IKS-ENV",
+            "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV"
+          }
+        ]
+      },
+      {
+        "label": "Legal",
+        "items": [
+          {
+            "label": "Legal",
+            "href": "/legal"
+          }
+        ]
+      }
+    ]
+  }
 }
 
 
