@@ -115,3 +115,11 @@ components:
         signature: { type: string }
         algorithm: { type: string, example: "governed-signature" }
         audit_id: { type: string }
+        paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+
