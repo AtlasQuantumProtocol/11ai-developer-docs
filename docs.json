@@ -1,0 +1,39 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "11 AI Developer Platform",
+  "theme": "mint",
+  "colors": {
+    "primary": "#2563EB",
+    "light": "#60A5FA",
+    "dark": "#1E3A8A"
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://www.11aiblockchain.com/"
+  },
+  "navbar": {
+    "links": [
+      { "label": "Blog", "href": "https://www.11aiblockchain.com/blog" },
+      { "label": "11/11 Research Labs", "href": "https://www.11aiblockchain.com/blog/categories/11-11-research-labs" },
+      { "label": "Git – lang-EXP", "href": "https://github.com/11-ai/11-11-lang-EXP" },
+      { "label": "Git – IKS-ENV", "href": "https://github.com/11-ai/11-11-IKS-env" }
+    ]
+  },
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "docs/index",
+        "docs/authentication",
+        "docs/sdks/quickstart"
+      ]
+    },
+    {
+      "group": "Legal",
+      "pages": [
+        "docs/legal"
+      ]
+    }
+  ]
+}
