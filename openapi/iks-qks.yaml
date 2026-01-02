@@ -1,4 +1,5 @@
 openapi: 3.0.3
+
 info:
   title: 11/11 IKS / QKS API
   description: Cryptographic governance and key execution APIs
@@ -10,22 +11,19 @@ tags:
   - name: Execution
     description: Cryptographic execution endpoints
 
-components:
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-11-API-KEY
-    SignatureAuth:
-      type: apiKey
-      in: header
-      name: X-11-SIGNATURE
-
 security:
   - ApiKeyAuth: []
   - SignatureAuth: []
 
 paths:
+  /health:
+    get:
+      tags: [Execution]
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+
   /iks/keys:
     get:
       tags: [Keys]
@@ -52,7 +50,8 @@ paths:
         - name: key_id
           in: path
           required: true
-          schema: { type: string }
+          schema:
+            type: string
       responses:
         "200":
           description: Key metadata
@@ -63,7 +62,7 @@ paths:
 
   /qks/operations/sign:
     post:
-      tags: [Operations]
+      tags: [Execution]
       summary: Request a governed signing operation
       description: Requests a policy-governed signing operation (interface-only).
       requestBody:
@@ -72,6 +71,12 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SignRequest"
+            examples:
+              minimal:
+                summary: Minimal signing request
+                value:
+                  key_id: "key_123"
+                  payload: "SGVsbG8sIDExLzExIQ=="
       responses:
         "200":
           description: Signed response
@@ -79,6 +84,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SignResponse"
+              examples:
+                signed:
+                  summary: Example response
+                  value:
+                    signature: "0xdeadbeef..."
+                    algorithm: "governed-signature"
+                    audit_id: "audit_001"
 
 components:
   securitySchemes:
@@ -95,16 +107,24 @@ components:
     KeyMetadata:
       type: object
       properties:
-        key_id: { type: string }
-        type: { type: string, example: "governance" }
-        status: { type: string, example: "active" }
-        created_at: { type: string, format: date-time }
+        key_id:
+          type: string
+        type:
+          type: string
+          example: "governance"
+        status:
+          type: string
+          example: "active"
+        created_at:
+          type: string
+          format: date-time
 
     SignRequest:
       type: object
       required: [key_id, payload]
       properties:
-        key_id: { type: string }
+        key_id:
+          type: string
         payload:
           type: string
           description: Base64-encoded payload
@@ -112,14 +132,12 @@ components:
     SignResponse:
       type: object
       properties:
-        signature: { type: string }
-        algorithm: { type: string, example: "governed-signature" }
-        audit_id: { type: string }
-        paths:
-  /health:
-    get:
-      summary: Health check
-      responses:
-        '200':
-          description: OK
+        signature:
+          type: string
+        algorithm:
+          type: string
+          example: "governed-signature"
+        audit_id:
+          type: string
+
 
