@@ -37,47 +37,40 @@
       }
     ]
   },
+"navigation": {
+  "groups": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "docs/index",
+        "docs/authentication",
+        "docs/sdks/quickstart"
+      ]
+    },
 
-  "navigation": {
-    "groups": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "docs/index",
-          "docs/authentication",
-          "docs/sdks/quickstart"
-        ]
-      },
+    {
+      "group": "API Reference — IKS / QKS",
+      "openapi": "openapi/openapi/iks-qks.yaml"
+    },
 
-      {
-        "group": "API Reference — IKS / QKS",
-        "openapi": "openapi/iks-qks.yaml"
-      },
+    {
+      "group": "API Reference — Atlas IPFS",
+      "openapi": "openapi/atlas-ipfs.yaml"
+    },
 
-      {
-        "group": "API Reference — Atlas IPFS",
-        "openapi": "openapi/atlas-ipfs.yaml"
-      },
+    {
+      "group": "API Reference — AI Platform",
+      "openapi": "openapi/ai-platform.yaml"
+    },
 
-      {
-        "group": "API Reference — AI Platform",
-        "openapi": "openapi/ai-platform.yaml"
-      },
-
-      {
-        "group": "Legal",
-        "pages": [
-          "docs/legal"
-        ]
-      }
-    ]
-  }
+    {
+      "group": "Legal",
+      "pages": [
+        "docs/legal"
+      ]
+    }
+  ]
 }
-
-
-
-
-
 
 
   
