@@ -7,9 +7,9 @@
     "light": "#60A5FA",
     "dark": "#1E3A8A"
   },
-  "logo": {
-  "light": ":/images/atlasq-logo.png",
-  "dark": ":/images/atlasq-logo.png",
+"logo": {
+  "light": "/assets/atlasq-logo.png",
+  "dark": "/assets/atlasq-logo.png",
   "href": "https://www.11aiblockchain.com/"
 },
   "navbar": {
