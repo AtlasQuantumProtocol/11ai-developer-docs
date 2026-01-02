@@ -1,20 +1,25 @@
 openapi: 3.0.3
 info:
   title: 11/11 IKS / QKS API
+  description: Cryptographic governance and key execution APIs
   version: "1.0.0"
-  description: |
-    Public API for the 11/11 IKS / QKS layer.
-
-    Interfaces and behavior only. Internal cryptographic algorithms, derivation logic,
-    and policy engines are proprietary and intentionally excluded.
-servers:
-  - url: https://api.11aiblockchain.com
 
 tags:
   - name: Keys
-    description: Key metadata and governed key access
-  - name: Operations
-    description: Auditable operations controlled by policy
+    description: Key lifecycle and governance operations
+  - name: Execution
+    description: Cryptographic execution endpoints
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-11-API-KEY
+    SignatureAuth:
+      type: apiKey
+      in: header
+      name: X-11-SIGNATURE
 
 security:
   - ApiKeyAuth: []
