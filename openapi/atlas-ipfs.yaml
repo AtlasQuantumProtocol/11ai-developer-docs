@@ -1,0 +1,132 @@
+openapi: 3.0.3
+info:
+  title: Atlas 11/11 IPFS API
+  version: "1.0.0"
+  description: |
+    Public API for Atlas 11/11 IPFS.
+
+    Interfaces and behavior only. Storage internals and network architecture remain proprietary.
+servers:
+  - url: https://api.11aiblockchain.com
+
+tags:
+  - name: Objects
+    description: Object creation and retrieval
+  - name: Metadata
+    description: Metadata operations
+
+security:
+  - ApiKeyAuth: []
+  - SignatureAuth: []
+
+paths:
+  /atlas/objects:
+    post:
+      tags: [Objects]
+      summary: Create object record (upload intent)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateObjectRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ObjectRecord"
+
+    get:
+      tags: [Objects]
+      summary: List objects
+      responses:
+        "200":
+          description: List
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  objects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ObjectRecord"
+
+  /atlas/objects/{object_id}:
+    get:
+      tags: [Objects]
+      summary: Get object record
+      parameters:
+        - name: object_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ObjectRecord"
+
+  /atlas/objects/{object_id}/metadata:
+    patch:
+      tags: [Metadata]
+      summary: Update object metadata
+      parameters:
+        - name: object_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ObjectRecord"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-11-API-KEY
+    SignatureAuth:
+      type: apiKey
+      in: header
+      name: X-11-SIGNATURE
+
+  schemas:
+    CreateObjectRequest:
+      type: object
+      required: [tenant_id, name, content_type]
+      properties:
+        tenant_id: { type: string }
+        name: { type: string }
+        content_type: { type: string }
+        metadata:
+          type: object
+          additionalProperties: true
+
+    ObjectRecord:
+      type: object
+      required: [object_id, tenant_id, name, content_type, created_at]
+      properties:
+        object_id: { type: string }
+        tenant_id: { type: string }
+        name: { type: string }
+        content_type: { type: string }
+        created_at: { type: string, format: date-time }
+        metadata:
+          type: object
+          additionalProperties: true
