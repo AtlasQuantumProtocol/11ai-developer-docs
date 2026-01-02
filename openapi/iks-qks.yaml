@@ -139,6 +139,32 @@ components:
           example: "governed-signature"
         audit_id:
           type: string
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-11-API-KEY
+    SignatureAuth:
+      type: apiKey
+      in: header
+      name: X-11-SIGNATURE
+
+  schemas:
+    KeyMetadata:
+      type: object
+      properties:
+        key_id:
+          type: string
+        type:
+          type: string
+          example: "governance"
+        status:
+          type: string
+          example: "active"
+        created_at:
+          type: string
+          format: date-time
 
 
 
