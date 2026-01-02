@@ -12,6 +12,7 @@
     "dark": "/logo/dark.svg",
     "href": "https://www.11aiblockchain.com/"
   },
+  { "label": "DEPLOY_TEST_1000", "href": "https://www.11aiblockchain.com/blog" }
   "navbar": {
     "links": []
   },
