@@ -12,17 +12,9 @@
     "dark": "/logo/dark.svg",
     "href": "https://www.11aiblockchain.com/"
   },
-  { "label": "DEPLOY_TEST_999", "href": "https://www.11aiblockchain.com/blog" }
-
- "navbar": {
-  "links": [
-    {
-      "label": "Blog",
-      "href": "https://www.11aiblockchain.com/blog"
-    }
-  ]
-}
-
+  "navbar": {
+    "links": []
+  },
   "navigation": {
     "products": [
       {
