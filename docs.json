@@ -31,14 +31,19 @@
         ]
       },
       {
-        "group": "API Reference",
-        "pages": [
-          "api/iks-qks",
-          "api/atlas-ipfs",
-          "api/ai-platform"
-        ]
-      },
-      {
+       {
+  "group": "API Reference — IKS / QKS",
+  "openapi": "openapi/iks-qks.yaml"
+},
+{
+  "group": "API Reference — Atlas IPFS",
+  "openapi": "openapi/atlas-ipfs.yaml"
+},
+{
+  "group": "API Reference — AI Platform",
+  "openapi": "openapi/ai-platform.yaml"
+}
+
         "group": "Legal",
         "pages": [
           "docs/legal"
