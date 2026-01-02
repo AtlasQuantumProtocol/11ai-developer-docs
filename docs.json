@@ -13,24 +13,7 @@
     "href": "https://www.11aiblockchain.com/"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "11/11 Research Labs",
-        "href": "https://11ai.com/blog/categories/11-11-research-labs"
-      },
-      {
-        "label": "Git – lang-EXP",
-        "href": "https://github.com/11-ai/11-11-lang-EXP"
-      },
-      {
-        "label": "Git – IKS-ENV",
-        "href": "https://github.com/11-ai/11-11-IKS-env"
-      },
-      {
-        "label": "Blog",
-        "href": "https://www.11aiblockchain.com/blog"
-      }
-    ]
+    "links": []
   },
   "navigation": {
     "products": [
