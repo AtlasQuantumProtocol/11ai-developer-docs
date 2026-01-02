@@ -1,19 +1,21 @@
 openapi: 3.0.3
 info:
   title: 11/11 AI Platform API
+  description: Governed AI job execution APIs
   version: "1.0.0"
-  description: |
-    Public API for governed AI execution services.
-
-    Interfaces and behavior only. Model internals and policy engines remain proprietary.
-servers:
-  - url: https://api.11aiblockchain.com
 
 tags:
   - name: Jobs
-    description: Job submission and lifecycle
+    description: AI job lifecycle operations
   - name: Results
-    description: Job result retrieval
+    description: Output and result access
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-11-API-KEY
 
 security:
   - ApiKeyAuth: []
