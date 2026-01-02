@@ -1,20 +1,27 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "11 AI Developer Platform",
+
   "theme": "mint",
+
   "colors": {
     "primary": "#2563EB",
     "light": "#60A5FA",
     "dark": "#1E3A8A"
   },
+
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg",
     "href": "https://www.11aiblockchain.com/"
   },
+
   "navbar": {
     "links": [
-      { "label": "Blog", "href": "https://www.11aiblockchain.com/blog" },
+      {
+        "label": "Blog",
+        "href": "https://www.11aiblockchain.com/blog"
+      },
       {
         "label": "11/11 Research Labs",
         "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research"
@@ -29,31 +36,33 @@
       }
     ]
   },
- "navigation": {
-  "pages": [
-    {
-      "group": "Getting Started",
-      "pages": [
-        "docs/index",
-        "docs/authentication",
-        "docs/sdks/quickstart"
-      ]
-    },
-    {
-      "group": "API Reference",
-      "pages": [
-        { "openapi": "openapi/iks-qks.yaml" },
-        { "openapi": "openapi/atlas-ipfs.yaml" },
-        { "openapi": "openapi/ai-platform.yaml" }
-      ]
-    },
-    {
-      "group": "Legal",
-      "pages": [
-        "docs/legal"
-      ]
-    }
-  ]
+
+  "navigation": {
+    "pages": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "docs/index",
+          "docs/authentication",
+          "docs/sdks/quickstart"
+        ]
+      },
+      {
+        "group": "API Reference",
+        "pages": [
+          { "openapi": "openapi/iks-qks.yaml" },
+          { "openapi": "openapi/atlas-ipfs.yaml" },
+          { "openapi": "openapi/ai-platform.yaml" }
+        ]
+      },
+      {
+        "group": "Legal",
+        "pages": [
+          "docs/legal"
+        ]
+      }
+    ]
+  }
 }
 
 
