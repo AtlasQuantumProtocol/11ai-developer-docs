@@ -12,24 +12,23 @@
     "dark": "/logo/dark.svg",
     "href": "https://www.11aiblockchain.com/"
   },
-"navbar": {
-  "links": [
-    {
-      "label": "Blog",
-      "href": "https://www.11aiblockchain.com/blog"
-    },
-    {
-      "label": "11/11 Research Labs",
-      "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research"
-    },
-    {
-      "label": "Git – lang-EXP",
-      "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP"
-    },
-    {
-      "label": "Git – IKS-ENV",
-      "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV"
-    }
+  "navbar": {
+    "links": [
+      { "label": "Blog", "href": "https://www.11aiblockchain.com/blog" },
+      {
+        "label": "11/11 Research Labs",
+        "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research"
+      },
+      {
+        "label": "Git – lang-EXP",
+        "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP"
+      },
+      {
+        "label": "Git – IKS-ENV",
+        "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV"
+      }
+    ]
+  },
   "navigation": {
     "pages": [
       {
@@ -49,6 +48,7 @@
     ]
   }
 }
+
 
 
 
