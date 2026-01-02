@@ -48,6 +48,46 @@
   },
   "thumbnails": {
     "background": "/images/atlasq-logo.png"
+    "footer": {
+  "links": [
+    {
+      "label": "Company",
+      "items": [
+        {
+          "label": "Blog",
+          "href": "https://www.11aiblockchain.com/blog"
+        },
+        {
+          "label": "Research",
+          "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research"
+        }
+      ]
+    },
+    {
+      "label": "Developers",
+      "items": [
+        {
+          "label": "Lang-EXP",
+          "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP"
+        },
+        {
+          "label": "IKS-ENV",
+          "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV"
+        }
+      ]
+    },
+    {
+      "label": "Legal",
+      "items": [
+        {
+          "label": "Legal",
+          "href": "/legal"
+        }
+      ]
+    }
+  ]
+}
+
   }
 }
 
