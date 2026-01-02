@@ -1,51 +1,116 @@
 openapi: 3.0.3
+
 info:
   title: 11/11 AI Platform API
-  description: Governed AI job execution APIs
   version: "1.0.0"
+  description: |
+    Governed AI execution APIs for the 11/11 platform.
+
+    This specification documents interfaces and system behavior only.
+    Model internals, policy engines and proprietary execution details remain private.
+
+servers:
+  - url: https://api.11aiblockchain.com
 
 tags:
   - name: Jobs
-    description: AI job lifecycle operations
+    description: Job submission, status, listing and cancellation
   - name: Results
-    description: Output and result access
-
-components:
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-11-API-KEY
+    description: Result retrieval for completed jobs
+  - name: Audit
+    description: Audit-aligned lifecycle events and traceability
 
 security:
   - ApiKeyAuth: []
+  - TimestampAuth: []
   - SignatureAuth: []
 
 paths:
   /ai/jobs:
     post:
       tags: [Jobs]
-      summary: Submit a job
+      summary: Submit a governed AI job
+      description: >
+        Submits a policy-governed AI job for execution. Jobs are auditable and may be rejected
+        if constraints are not satisfied.
+      operationId: submitJob
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/SubmitJobRequest"
+            examples:
+              minimal:
+                summary: Minimal request
+                value:
+                  tenant_id: "tenant_123"
+                  job_type: "analysis"
+                  input:
+                    object_id: "obj_456"
+              with_options:
+                summary: With options
+                value:
+                  tenant_id: "tenant_123"
+                  job_type: "analysis"
+                  input:
+                    object_id: "obj_456"
+                  options:
+                    priority: "standard"
+                    timeout_s: 60
+                    trace: true
       responses:
         "202":
-          description: Accepted
+          description: Accepted (job queued)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/JobReceipt"
+              examples:
+                accepted:
+                  summary: Accepted receipt
+                  value:
+                    job_id: "job_abc123"
+                    status: "ACCEPTED"
+                    audit_id: "audit_001"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                bad_request:
+                  value:
+                    error: "invalid_request"
+                    message: "job_type is required"
+        "401":
+          description: Unauthorized
+        "429":
+          description: Rate limited
 
     get:
       tags: [Jobs]
-      summary: List jobs
+      summary: List recent jobs
+      description: Returns recent jobs visible to the caller (most recent first).
+      operationId: listJobs
+      parameters:
+        - name: tenant_id
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
       responses:
         "200":
-          description: Jobs
+          description: Job list
           content:
             application/json:
               schema:
@@ -55,42 +120,171 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/JobStatus"
+              examples:
+                list:
+                  value:
+                    jobs:
+                      - job_id: "job_abc123"
+                        status: "RUNNING"
+                        updated_at: "2026-01-01T20:10:00Z"
+                        audit_id: "audit_001"
+                      - job_id: "job_def456"
+                        status: "SUCCEEDED"
+                        updated_at: "2026-01-01T20:01:12Z"
+                        audit_id: "audit_002"
 
   /ai/jobs/{job_id}:
     get:
       tags: [Jobs]
       summary: Get job status
+      description: Returns status and metadata for a single job.
+      operationId: getJobStatus
       parameters:
         - name: job_id
           in: path
           required: true
-          schema: { type: string }
+          schema:
+            type: string
       responses:
         "200":
-          description: Status
+          description: Job status
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/JobStatus"
+              examples:
+                running:
+                  value:
+                    job_id: "job_abc123"
+                    status: "RUNNING"
+                    updated_at: "2026-01-01T20:10:00Z"
+                    audit_id: "audit_001"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                not_found:
+                  value:
+                    error: "not_found"
+                    message: "job_id not found"
+
+    delete:
+      tags: [Jobs]
+      summary: Cancel a job
+      description: Requests cancellation. Cancellation may be best-effort depending on state.
+      operationId: cancelJob
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "202":
+          description: Cancellation requested
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                  status:
+                    type: string
+                    example: "CANCEL_REQUESTED"
+              examples:
+                cancel_req:
+                  value:
+                    job_id: "job_abc123"
+                    status: "CANCEL_REQUESTED"
+        "404":
+          description: Not found
 
   /ai/jobs/{job_id}/result:
     get:
       tags: [Results]
       summary: Get job result
+      description: Returns the job output if the job has completed successfully.
+      operationId: getJobResult
       parameters:
         - name: job_id
           in: path
           required: true
-          schema: { type: string }
+          schema:
+            type: string
       responses:
         "200":
-          description: Result
+          description: Result payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/JobResult"
+              examples:
+                result:
+                  value:
+                    job_id: "job_def456"
+                    audit_id: "audit_002"
+                    output:
+                      summary: "Analysis completed successfully"
+                      metrics:
+                        tokens_in: 1240
+                        tokens_out: 420
         "409":
           description: Not ready
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                not_ready:
+                  value:
+                    error: "not_ready"
+                    message: "job is not complete"
+        "404":
+          description: Not found
+
+  /ai/audit/events:
+    get:
+      tags: [Audit]
+      summary: List audit events
+      description: Returns audit events for job lifecycle and governed execution.
+      operationId: listAuditEvents
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
+      responses:
+        "200":
+          description: Audit events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AuditEvent"
+              examples:
+                events:
+                  value:
+                    events:
+                      - audit_id: "audit_001"
+                        event_type: "job_submitted"
+                        job_id: "job_abc123"
+                        timestamp: "2026-01-01T20:00:00Z"
+                      - audit_id: "audit_001"
+                        event_type: "job_running"
+                        job_id: "job_abc123"
+                        timestamp: "2026-01-01T20:00:10Z"
 
 components:
   securitySchemes:
@@ -98,47 +292,98 @@ components:
       type: apiKey
       in: header
       name: X-11-API-KEY
+      description: API key for platform access
+    TimestampAuth:
+      type: apiKey
+      in: header
+      name: X-11-TIMESTAMP
+      description: Unix timestamp (seconds)
     SignatureAuth:
       type: apiKey
       in: header
       name: X-11-SIGNATURE
+      description: Request signature (SDK-generated)
 
   schemas:
     SubmitJobRequest:
       type: object
       required: [tenant_id, job_type, input]
       properties:
-        tenant_id: { type: string }
-        job_type: { type: string }
+        tenant_id:
+          type: string
+        job_type:
+          type: string
+          description: High-level classification (analysis, transform, evaluate, etc.)
         input:
           type: object
+          description: Input reference(s) for the job
           additionalProperties: true
         options:
           type: object
+          description: Optional execution hints (policy-governed)
           additionalProperties: true
 
     JobReceipt:
       type: object
       required: [job_id, status]
       properties:
-        job_id: { type: string }
-        status: { type: string, enum: [ACCEPTED] }
-        audit_id: { type: string }
+        job_id:
+          type: string
+        status:
+          type: string
+          enum: [ACCEPTED]
+        audit_id:
+          type: string
 
     JobStatus:
       type: object
-      required: [job_id, status]
+      required: [job_id, status, updated_at]
       properties:
-        job_id: { type: string }
+        job_id:
+          type: string
         status:
           type: string
           enum: [PENDING, RUNNING, SUCCEEDED, FAILED, CANCELED]
-        updated_at: { type: string, format: date-time }
+        updated_at:
+          type: string
+          format: date-time
+        audit_id:
+          type: string
 
     JobResult:
       type: object
+      required: [job_id]
       properties:
-        job_id: { type: string }
+        job_id:
+          type: string
+        audit_id:
+          type: string
         output:
           type: object
           additionalProperties: true
+
+    AuditEvent:
+      type: object
+      properties:
+        audit_id:
+          type: string
+        event_type:
+          type: string
+        job_id:
+          type: string
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: object
+          additionalProperties: true
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+
