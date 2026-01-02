@@ -1,19 +1,21 @@
 openapi: 3.0.3
 info:
   title: Atlas 11/11 IPFS API
+  description: Secure storage and auditable data access
   version: "1.0.0"
-  description: |
-    Public API for Atlas 11/11 IPFS.
-
-    Interfaces and behavior only. Storage internals and network architecture remain proprietary.
-servers:
-  - url: https://api.11aiblockchain.com
 
 tags:
-  - name: Objects
-    description: Object creation and retrieval
-  - name: Metadata
-    description: Metadata operations
+  - name: Storage
+    description: Data storage operations
+  - name: Retrieval
+    description: Data retrieval operations
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-11-API-KEY
 
 security:
   - ApiKeyAuth: []
