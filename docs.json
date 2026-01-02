@@ -45,6 +45,9 @@
         ]
       }
     ]
+  },
+  "thumbnails": {
+    "background": "/images/atlasq-logo.png"
   }
 }
 
