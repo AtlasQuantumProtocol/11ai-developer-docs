@@ -7,11 +7,11 @@
     "light": "#60A5FA",
     "dark": "#1E3A8A"
   },
-"logo": {
-  "light": "/Screen Shot 2025-04-05 at 9.51.01 AM copy.png",
-  "dark": "/Screen Shot 2025-04-05 at 9.51.01 AM copy.png",
-  "href": "https://www.11aiblockchain.com/"
-},
+  "logo": {
+    "light": "/atlasq-logo.png",
+    "dark": "/atlasq-logo.png",
+    "href": "https://www.11aiblockchain.com/"
+  },
   "navbar": {
     "links": [
       { "label": "Blog", "href": "https://www.11aiblockchain.com/blog" },
@@ -46,50 +46,32 @@
       }
     ]
   },
-  "thumbnails": {
-    "background": "/images/atlasq-logo.png"
-    "footer": {
-  "links": [
-    {
-      "label": "Company",
-      "items": [
-        {
-          "label": "Blog",
-          "href": "https://www.11aiblockchain.com/blog"
-        },
-        {
-          "label": "Research",
-          "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research"
-        }
-      ]
-    },
-    {
-      "label": "Developers",
-      "items": [
-        {
-          "label": "Lang-EXP",
-          "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP"
-        },
-        {
-          "label": "IKS-ENV",
-          "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV"
-        }
-      ]
-    },
-    {
-      "label": "Legal",
-      "items": [
-        {
-          "label": "Legal",
-          "href": "/legal"
-        }
-      ]
-    }
-  ]
-}
-
+  "footer": {
+    "links": [
+      {
+        "label": "Company",
+        "items": [
+          { "label": "Blog", "href": "https://www.11aiblockchain.com/blog" },
+          { "label": "Research", "href": "https://www.11aiblockchain.com/blog/categories/quantum-ai-systems-research" }
+        ]
+      },
+      {
+        "label": "Developers",
+        "items": [
+          { "label": "Lang-EXP", "href": "https://github.com/AtlasQuantumProtocol/11-11-lang-EXP" },
+          { "label": "IKS-ENV", "href": "https://github.com/AtlasQuantumProtocol/11-11-IKS-ENV" }
+        ]
+      },
+      {
+        "label": "Legal",
+        "items": [
+          { "label": "Legal", "href": "/legal" }
+        ]
+      }
+    ]
   }
 }
+
 
 
 
