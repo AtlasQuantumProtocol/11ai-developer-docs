@@ -20,32 +20,66 @@
       { "label": "Git – IKS-ENV", "href": "https://github.com/11-ai/11-11-IKS-env" }
     ]
   },
-  "navigation": {
-    "pages": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "docs/index",
-          "docs/authentication",
-          "docs/sdks/quickstart"
-        ]
-      },
-      {
-        "group": "API Reference",
-        "pages": [
-          "openapi/iks-qks",
-          "openapi/atlas-ipfs",
-          "openapi/ai-platform"
-        ]
-      },
-      {
-        "group": "Legal",
-        "pages": [
-          "docs/legal"
-        ]
-      }
-    ]
-  }
+"navigation": {
+  "products": [
+    {
+      "product": "11/11 IKS / QKS",
+      "description": "Cryptographic governance and key systems.",
+      "icon": "key",
+      "groups": [
+        {
+          "group": "Getting started",
+          "pages": [
+            "docs/index",
+            "docs/authentication",
+            "docs/sdks/quickstart"
+          ]
+        },
+        {
+          "group": "API Reference",
+          "openapi": "openapi/iks-qks.yaml"
+        }
+      ]
+    },
+    {
+      "product": "Atlas 11/11 IPFS",
+      "description": "Secure, auditable storage and access services.",
+      "icon": "database",
+      "groups": [
+        {
+          "group": "Overview",
+          "pages": [
+            "docs/index"
+          ]
+        },
+        {
+          "group": "API Reference",
+          "openapi": "openapi/atlas-ipfs.yaml"
+        }
+      ]
+    },
+    {
+      "product": "11/11 AI Platform",
+      "description": "Governed AI execution services.",
+      "icon": "cpu",
+      "groups": [
+        {
+          "group": "Overview",
+          "pages": [
+            "docs/index"
+          ]
+        },
+        {
+          "group": "API Reference",
+          "openapi": "openapi/ai-platform.yaml"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "group": "Legal",
+      "pages": ["docs/legal"]
+    }
+  ]
 }
-
-
