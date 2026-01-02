@@ -13,13 +13,26 @@
     "href": "https://11ai.com"
   },
   "navbar": {
-    "links": [
-      { "label": "Blog", "href": "https://11ai.com/blog" },
-      { "label": "11/11 Research Labs", "href": "https://11ai.com/blog/categories/11-11-research-labs" },
-      { "label": "Git – lang-EXP", "href": "https://github.com/11-ai/11-11-lang-EXP" },
-      { "label": "Git – IKS-ENV", "href": "https://github.com/11-ai/11-11-IKS-env" }
-    ]
-  },
+  "links": [
+    {
+      "label": "Blog",
+      "href": "https://www.11aiblockchain.com/blog"
+    },
+    {
+      "label": "11/11 Research Labs",
+      "href": "https://www.11aiblockchain.com/blog/categories/11-11-research-labs"
+    },
+    {
+      "label": "Git – lang-EXP",
+      "href": "https://github.com/11-ai/11-11-lang-EXP"
+    },
+    {
+      "label": "Git – IKS-ENV",
+      "href": "https://github.com/11-ai/11-11-IKS-env"
+    }
+  ]
+}
+
   "navigation": {
     "products": [
       {
