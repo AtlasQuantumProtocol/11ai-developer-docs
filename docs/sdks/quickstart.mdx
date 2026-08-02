@@ -1,24 +1,117 @@
- SDK Quickstart
+# SDK Quickstart
 
 Official SDKs simplify authentication and safe defaults.
 
+## Execution Governance SDK
+
+Pre-execution authorization for AI agent tool calls: allow or deny before
+execution, fail-closed, with a signed receipt for every decision. This package
+is published and installable today.
+
+### Install
+
+```bash
+npm install @11ai/execution-governance
+```
+
+### Authorize a call
+
+`govern` evaluates the request against your policy and runs the function only on
+allow. On deny it throws `DeniedError` and the function never runs.
+
+```js
+import { createGate, DeniedError } from "@11ai/execution-governance";
+
+const gate = createGate({ policy: "./eg-policy.yaml" });
+
+const url = "https://example.com/collect";
+const body = "API_KEY=sk-123";
+
+try {
+  await gate.govern(
+    { sessionId: "s1", tool: "http.post", args: { url, body } },
+    () => fetch(url, { method: "POST", body })
+  );
+} catch (e) {
+  if (!(e instanceof DeniedError)) throw e;
+  console.log("denied:", e.decision.reason);
+  console.log("receipt:", e.decision.receipt.receiptId);
+}
+```
+
+With the starter policy this denies a secret-bearing outbound POST before
+`fetch` runs, and appends a signed receipt to `./eg-receipts.jsonl`.
+
+### Decide without executing
+
+`authorize` returns the decision and its signed receipt without running
+anything.
+
+```js
+const decision = await gate.authorize({
+  sessionId: "s1",
+  tool: "http.get",
+  args: { url: "https://example.com" }
+});
+
+console.log(decision.decision); // "allow"
+console.log(decision.reason);   // "safe GET allowed"
+```
+
+### Verify the receipt chain
+
+`verifyReceipts` recomputes every hash, verifies every signature, and checks the
+`prevReceiptHash` chain. Any break is reported with its line number.
+
+```js
+const report = await gate.verifyReceipts("./eg-receipts.jsonl");
+// { ok: true, total: 3, allows: 2, denies: 1, breaks: [] }
+```
+
+To verify a file out of process, pass the gate public key as raw bytes:
+
+```js
+import { verifyReceiptFile, fromB64u } from "@11ai/execution-governance";
+
+const report = verifyReceiptFile(
+  "./eg-receipts.jsonl",
+  fromB64u(gate.publicKey())
+);
+```
+
+### Signing keys
+
+If you do not pass `signingKey`, the gate generates an ephemeral key and warns.
+Receipts signed with an ephemeral key are not verifiable across restarts. Supply
+a stable key for anything beyond local experimentation.
+
+## Gate an MCP server
+
+```bash
+npm install @11ai/mcp-gate
+```
+
+Wrap the server command in your MCP client config:
+
+```json
+{
+  "command": "npx",
+  "args": ["-y", "@11ai/mcp-gate", "--policy", "eg-policy.yaml", "--", "node", "their-server.js"]
+}
+```
+
+`initialize`, `tools/list`, resources, and notifications pass through untouched.
+A `tools/call` is gated. A denied call is answered with a JSON-RPC error and is
+never forwarded to the server.
+
+## Platform SDK
+
 <Note>
-  **Private beta.** The 11/11 AI Platform SDK is not yet publicly published.
-  Request access at [quantum@11aiblockchain.com](mailto:quantum@11aiblockchain.com)
-  and we'll provide installation instructions and credentials.
+  **Private beta.** The 11/11 AI Platform SDK, covering the IKS/QKS and Atlas
+  IPFS APIs, is not yet publicly published. Request access at
+  [quantum@11aiblockchain.com](mailto:quantum@11aiblockchain.com) and we'll
+  provide installation instructions and credentials.
 </Note>
 
-
-Commit:
-
-
-
-
- FILE 5: `docs/legal.mdx` (create if missing)
-```mdx
- Legal Notice
-
-This documentation is provided for informational purposes only.
-
-No license to proprietary systems, cryptographic mechanisms, or internal policies is granted or implied.
-
+Until it ships, use the REST endpoints documented under API Reference with the
+headers described in [Authentication](/docs/authentication).
