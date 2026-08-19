@@ -10,7 +10,7 @@ Fail-Closed Runtime ACTIVE
 
 Checklist
 
-[ ] Verify ML-DSA-65 signatures
+[ ] Verify ML-DSA-87 signatures
 
 [ ] Verify SLH-DSA-SHA2-128f signatures
 

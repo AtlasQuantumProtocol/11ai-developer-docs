@@ -22,7 +22,7 @@ Cryptography
 
 Ed25519
 
-ML-DSA-65 (FIPS 204)
+ML-DSA-87 (FIPS 204)
 
 SLH-DSA-SHA2-128f (FIPS 205)
 
